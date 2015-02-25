@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Strateg Way</title>
+	
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--Include clasters-->
+	<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/example/screen.css" />
+	<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.css" /> <!--Ссылки на значки кластера-->
+	<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+	<script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script> <!--Скрипты для работы с кластерами-->
+	<script src="https://leaflet.github.io/Leaflet.markercluster/example/realworld.388.js"></script>
+	
+	<link rel="shortcut icon" href="/debug/hacks/img/favicon.ico" type="image/x-icon"><!--Favicon-->
+    <style>
+	 body {
+	 background: #00b0d8 url(img/gradient.png) repeat-x; 
+	 }
+  </style>
+	
+</head>
+<body>
+<!--<p style="font-size:30px">(pos1)</p>-->
+
+ <header>
+   <div class="logo">
+   <img src="img/logo.png" alt="Strateg Way"
+    style=margin-:100px;
+	width="132" height="65">
+   </div>
+  </header>
+
+
+	<div 
+	id="map">
+	</div>
+<script type="text/javascript">
+		var loc1;//1 балон
+		var loc2;//2 балон
+		var popup = L.popup();//Окошко с инфомарцией о координатах
+		var pos1;//Координата 1
+		var pos2;//Координата 2
+		
+			//Откуда берём тайлы, а также параметры максзума, атрибута
+		 var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
+	
+		// Что бы норм работало в хроме
+		L.Browser.chrome = true;
+		// Устанавливаем центр карты
+		var map = L.map('map')
+				.setView([48.785, 44.78], 14)
+				.addLayer(osm);	
+			
+		// По клику вызываем функцию добавления балона
+		map.on('click', function(e) {
+        onMapClick(e);
+		});
+	
+		// Функция добавления балона
+function onMapClick(e) {
+        if (loc1 == null) {
+            loc1 = new L.marker(e.latlng, {draggable: 'true',title: 'home'});
+            loc1.on('drag', function(event) {
+												//отправляем запрос маршрута
+											   });
+			popup.setLatLng(e.latlng) // "Устанавливаем" координаты 1 маркера
+			pos1=e.latlng.toString();
+			loc1.bindPopup("Starting point:" + pos1);
+            map.addLayer(loc1);
+        }
+        else if (loc2 == null) {
+            loc2 = new L.marker(e.latlng, {draggable: 'true',title: 'job'});
+            loc2.on('dragend', function(event) {
+												//отправляем запрос маршрута
+											   });
+			popup.setLatLng(e.latlng) // "Устанавливаем" координаты 2 маркера
+			pos2=e.latlng.toString();
+			loc2.bindPopup("Ending point:" + pos2);
+            map.addLayer(loc2);
+        }
+		
+    };
+	//Проверка на наличии точек на карте
+	 function test() {if (loc2==undefined)
+    { alert("Вы не указали пункт отправления и/или пункт назначения\nПросто щёлкните по карте два раза\nПопробуйте, это легко!")}
+	 else alert("\nПункт отправления:" + pos1 +"\nПункт назначения:" + pos2 + "\nВаши данные успешно сохранены.\n\nНажмите ОК для перезагрузки страницы.")}
+	
+	
+	document.write("Эта координата:" + pos1);// Не робит =(
+	</script>
+	
+	<p align=justify>
+	<center><form>
+	
+		<input name=save type=submit value="Сохранить!" onClick="test()">
+	<p align=justify>
+	
+	
+</body>
+</html>
+
+
+
